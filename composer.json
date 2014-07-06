@@ -4,7 +4,6 @@
     "license": "private",
     "homepage": "http://www.vrok.de/",
 
-    "minimum-stability": "dev",
     "require": {
         "php": ">=5.4",
         "zendframework/zendframework": "~2.3"
@@ -12,9 +11,6 @@
     "autoload": {
         "psr-0": {
             "FullCalendar": "src/"
-        },
-        "classmap": [
-            "./Module.php"
-        ]
+        }
     }
 }
