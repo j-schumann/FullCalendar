@@ -7,30 +7,16 @@
 
 namespace FullCalendar;
 
-use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
+use Zend\ModuleManager\Feature\ViewHelperProviderInterface;
 
 /**
  * Module bootstrapping.
  */
-class Module implements AutoloaderProviderInterface, ConfigProviderInterface
+class Module implements
+    ConfigProviderInterface,
+    ViewHelperProviderInterface
 {
-    /**
-     * Returns the autoloader definiton to use to load classes within this module.
-     *
-     * @return array
-     */
-    public function getAutoloaderConfig()
-    {
-        return array(
-            'Zend\Loader\StandardAutoloader' => array(
-                'namespaces' => array(
-                    __NAMESPACE__ => __DIR__,
-                ),
-            ),
-        );
-    }
-
     /**
      * Returns the modules default configuration.
      *
@@ -39,5 +25,32 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
     public function getConfig()
     {
         return include __DIR__ . '/../../config/module.config.php';
+    }
+
+    /**
+     * Retrieve additional view helpers using factories that are not set in the config.
+     *
+     * @return array
+     */
+    public function getViewHelperConfig()
+    {
+        return array(
+            'factories' => array(
+                'fullCalendar' => function($helperPluginManager) {
+                    $helper = new View\Helper\FullCalendar();
+
+                    $serviceLocator = $helperPluginManager->getServiceLocator();
+                    $config = $serviceLocator->get('Config');
+                    if (!empty($config['full_calendar']['base_path'])) {
+                        $helper->setBasePath($config['full_calendar']['base_path']);
+                    }
+                    if (!empty($config['full_calendar']['script_path'])) {
+                        $helper->setScriptPath($config['full_calendar']['script_path']);
+                    }
+
+                    return $helper;
+                },
+            ),
+        );
     }
 }
