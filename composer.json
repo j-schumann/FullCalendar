@@ -4,23 +4,9 @@
     "license": "private",
     "homepage": "http://www.vrok.de/",
 
-    "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "arshaw/fullcalendar",
-                "version": "2.1.1",
-                "dist": {
-                    "type": "zip",
-                    "url": "https://github.com/arshaw/fullcalendar/archive/v2.1.1.zip"
-                }
-            }
-        }
-    ],
     "require": {
         "php": ">=5.4",
-        "zendframework/zendframework": "~2.3",
-        "arshaw/fullcalendar": "2.1.1"
+        "zendframework/zendframework": "~2.3"
     },
     "autoload": {
         "psr-0": {

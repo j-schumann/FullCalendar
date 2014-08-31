@@ -96,14 +96,16 @@ class FullCalendar extends AbstractHelper
      */
     public function includeCalendar()
     {
+        // jqueryUI is no dependency of fullcalendar any longer since 2.1.0 but we need
+        // it for the $.dialog
         $this->getView()->headLink()
-            ->appendStylesheet($this->scriptPath.'/fullcalendar.css')
-            ->appendStylesheet('https://code.jquery.com/ui/1.11.1/themes/flick/jquery-ui.css');
+            ->appendStylesheet('//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.1.1/fullcalendar.min.css')
+            ->appendStylesheet('//code.jquery.com/ui/1.11.1/themes/flick/jquery-ui.css');
         $this->getView()->headScript()
-            ->appendFile($this->scriptPath.'/lib/moment.min.js')
-            ->appendFile('https://code.jquery.com/ui/1.11.1/jquery-ui.min.js')
-            ->appendFile($this->scriptPath.'/fullcalendar.min.js')
-            ->appendFile($this->scriptPath.'/lang-all.js')
+            ->appendFile('//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.1/moment.min.js')
+            ->appendFile('//code.jquery.com/ui/1.11.1/jquery-ui.min.js')
+            ->appendFile('//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.1.1/fullcalendar.min.js')
+            ->appendFile('//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.1.1/lang-all.js')
             ->appendFile($this->scriptPath.'/fullcalendarhelper.js');
 
         return $this;
