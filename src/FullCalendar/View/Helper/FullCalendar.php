@@ -29,10 +29,17 @@ class FullCalendar extends AbstractHelper
     protected $scriptPath = '/fullcalendar';
 
     /**
+     * Default settings injected from the system config.
      *
-     *
-     * @param array $config
-     * @return mixed
+     * @var array
+     */
+    protected $defaults = array(
+        'calendarId' => 'calendar',
+        'container'  => 'calendar',
+    );
+
+    /**
+     * {@inheritdoc}
      */
     public function __invoke($config = null)
     {
@@ -51,15 +58,7 @@ class FullCalendar extends AbstractHelper
      */
     public function render(array $config)
     {
-        // set a default, we need it for the API urls
-        if (!isset($config['calendarId'])) {
-            $config['calendarId'] = 'calendar';
-        }
-
-        // set a default, we need it to create the <div>
-        if (!isset($config['container'])) {
-            $config['container'] = 'calendar';
-        }
+        $config = array_merge($this->defaults, $config);
 
         // only set the API if the user has not set any custom URLs
         if (!isset($config['api'])) {
@@ -73,15 +72,20 @@ class FullCalendar extends AbstractHelper
             );
         }
 
-        $json = json_encode($config, JSON_UNESCAPED_UNICODE);
-        $this->getView()->headScript()->appendScript('
-            jQuery(document).ready(function($) {
-                var fc = new $.FullCalendarHelper('.$json.');
-                fc.createCalendar();
-            });
-        ', 'text/javascript');
+        // only set if no custom translations were injected
+        if (!isset($config['translations'])) {
+            $config['translations'] = array(
+                'createTitle' => $this->getView()->translate('view.fullCalendar.createTitle'),
+                'updateTitle' => $this->getView()->translate('view.fullCalendar.updateTitle'),
+            );
+        }
 
-        return '<div id="'.$config['container'].'"></div>';
+        // we don't add inline script or script into the header but set the
+        // fullcalendar-autoload class so the FullcalendarHelper does the rest
+        // If we load an calendar via Ajax we have to call
+        // $.FullCalendarHelper.autoload() manually
+        $json = htmlspecialchars(json_encode($config, JSON_UNESCAPED_UNICODE));
+        return '<div id="'.$config['container'].'" data-fullcalendar="'.($json).'" class="fullcalendar-autoload"></div>';
     }
 
     /**
@@ -146,6 +150,35 @@ class FullCalendar extends AbstractHelper
     public function setScriptPath($path)
     {
         $this->scriptPath = $path;
+        return $this;
+    }
+
+    /**
+     * Retrieve the current default settings for created calendars.
+     *
+     * @return array
+     */
+    public function getDefaults()
+    {
+        return $this->defaults;
+    }
+
+    /**
+     * Sets the default settings for created calendars.
+     *
+     * @param array $settings
+     * @param bool $merge   if true the settings will be merged with the defaults,
+     *     else the defaults are replaces
+     * @return self
+     */
+    public function setDefaults(array $settings, $merge = true)
+    {
+        if ($merge) {
+            $this->defaults = array_merge($this->defaults, $settings);
+        }
+        else {
+            $this->defaults = $settings;
+        }
         return $this;
     }
 }

@@ -5,14 +5,14 @@
  *  @author      Jakob Schumann <schumann@vrok.de>
  */
 
-namespace FullCalendar\Entry;
+namespace FullCalendar\Calendar;
 
 /**
  * PHP representation of an fullCalendar event object.
  *
  * @link http://arshaw.com/fullcalendar/docs/event_data/Event_Object/
  */
-interface EntryInterface
+interface EventInterface
 {
     /**
      * Returns the events unique identifier.

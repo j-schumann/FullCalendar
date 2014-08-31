@@ -1,5 +1,4 @@
 <?php
-
 /*
  *  @copyright   (c) 2014-2015, Vrok
  *  @license     http://customlicense CustomLicense
@@ -19,57 +18,9 @@ class Calendar implements EventManagerAwareInterface
 {
     use EventManagerAwareTrait;
 
-    const EVENT_LOAD_ENTRIES  = 'loadEntries';
     const EVENT_ENTRY_CLICKED = 'entryClicked';
     const EVENT_CREATE_ENTRY  = 'createEntry';
     const EVENT_UPDATE_ENTRY  = 'updateEntry';
-
-    /**
-     * Triggers the event to load all entries for the given calendar.
-     *
-     * @param string $calendarId
-     * @param \DateTime  $startDate
-     * @param \DateTime  $endDate
-     * @return array
-     * @triggers loadEvents
-     */
-    public function loadEntries($calendarId, \DateTime $startDate, \DateTime $endDate)
-    {
-        $results = $this->getEventManager()
-            ->trigger(self::EVENT_LOAD_ENTRIES, $this, array(
-                'calendarId' => $calendarId,
-                'startDate'  => $startDate,
-                'endDate'    => $endDate,
-            ));
-
-        if ($results->stopped()) {
-            return array();
-        }
-
-        return $this->mergeEntries($results);
-    }
-
-    /**
-     * Creates a list of entries from the event results.
-     *
-     * @param mixed $result
-     * @param array $entries
-     * @return array
-     */
-    protected function mergeEntries($result, array &$entries = array())
-    {
-        if (is_array($result) || $result instanceof \ArrayAccess) {
-            foreach($result as $object) {
-                $this->mergeEntries($object, $entries);
-            }
-        }
-
-        if ($result instanceof \FullCalendar\Entry\EntryInterface) {
-            $entries[] = $result->toArray();
-        }
-
-        return $entries;
-    }
 
     /**
      * Called when an entry was clicked in the calendar.
@@ -101,21 +52,19 @@ class Calendar implements EventManagerAwareInterface
      * Called when a range was selected in the calendar to create a new entry.
      * Triggers the event and returns the JSON response to the controller.
      *
-     * @param string $calendarId
+     * @param array $params     all raw params from the fullCalendar
      * @param \DateTime $startDate
      * @param \DateTime $endDate
-     * @param string $container
-     * @return mixed
+     * @return array
      * @triggers entryCreated
      */
-    public function createEntry($calendarId, $startDate, $endDate, $container)
+    public function createEntry(array $params, \DateTime $startDate, \DateTime $endDate)
     {
         $results = $this->getEventManager()
             ->trigger(self::EVENT_CREATE_ENTRY, $this, array(
-                'calendarId' => $calendarId,
-                'startDate'  => $startDate,
-                'endDate'    => $endDate,
-                'container'  => $container,
+                'params'    => $params,
+                'startDate' => $startDate,
+                'endDate'   => $endDate,
             ));
 
         if ($results->stopped()) {
@@ -129,23 +78,19 @@ class Calendar implements EventManagerAwareInterface
      * Called when an entry was resized or moved in the calendar.
      * Triggers the event and returns the JSON response to the controller.
      *
-     * @param string $calendarId
-     * @param string $entryId
+     * @param array $params     raw parameters from the fullCalendar
      * @param \DateTime $startDate
      * @param \DateTime $endDate
-     * @param string $container
      * @return mixed
      * @triggers entryUpdated
      */
-    public function updateEntry($calendarId, $entryId, $startDate, $endDate, $container)
+    public function updateEntry(array $params, \DateTime $startDate, \DateTime $endDate)
     {
         $results = $this->getEventManager()
             ->trigger(self::EVENT_UPDATE_ENTRY, $this, array(
-                'calendarId' => $calendarId,
-                'entryId'    => $entryId,
-                'startDate'  => $startDate,
-                'endDate'    => $endDate,
-                'container'  => $container,
+                'params'    => $params,
+                'startDate' => $startDate,
+                'endDate'   => $endDate,
             ));
 
         if ($results->stopped()) {

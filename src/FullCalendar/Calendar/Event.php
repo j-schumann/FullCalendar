@@ -5,14 +5,13 @@
  *  @author      Jakob Schumann <schumann@vrok.de>
  */
 
-namespace FullCalendar\Entry;
+namespace FullCalendar\Calendar;
 
 /**
- * Basic implementation of an fullCalendar compatible calendar entry.
- * Use this if your entries are stored in other formats/entites and need to be converted,
- * the services "loadEntries" event only accepts instances of EntryInterface.
+ * Basic implementation of an fullCalendar compatible calendar event.
+ * Use this if your events are stored in other formats/entites and need to be converted.
  */
-class BaseEntry implements EntryInterface
+class Event implements EventInterface
 {
     /**
      * @var string|int
@@ -135,7 +134,7 @@ class BaseEntry implements EntryInterface
     }
 
     /**
-     * Sets the events title.
+     * Sets the events id.
      *
      * @param string|int $value
      */

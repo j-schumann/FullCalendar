@@ -47,6 +47,9 @@ class Module implements
                     if (!empty($config['full_calendar']['script_path'])) {
                         $helper->setScriptPath($config['full_calendar']['script_path']);
                     }
+                    if (!empty($config['full_calendar']['settings'])) {
+                        $helper->setDefaults($config['full_calendar']['settings'], true);
+                    }
 
                     return $helper;
                 },
