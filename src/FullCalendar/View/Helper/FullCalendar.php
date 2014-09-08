@@ -10,7 +10,8 @@ namespace FullCalendar\View\Helper;
 use Zend\View\Helper\AbstractHelper;
 
 /**
- * Extends the Zend helper to render all messages at once.
+ * Injects the javascripts and css files required for the calendar into the header
+ * and renders the DOM element with the calendar configuration.
  */
 class FullCalendar extends AbstractHelper
 {

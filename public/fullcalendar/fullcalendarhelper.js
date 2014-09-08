@@ -77,12 +77,12 @@
 
             slotMinutes: 15,
             snapMinutes: 15,
-            defaultEventMinutes: 45,
+            defaultEventMinutes: 60
         },
 
 
         onViewRender: function(view, element) {
-            if (view.name === 'agendaDay') {
+            /*if (view.name === 'agendaDay') {
                 if (view.calendar.options.agendaDay) {
                     var agendaDay = view.calendar.options.agendaDay
                     if (agendaDay.slotDuration) {
@@ -93,9 +93,9 @@
 
                     console.log(view.calendar.options.agendaDay);
                 }
-            }
-            console.log(view);
-            console.log('da');
+            }*/
+            //console.log(view.calendar.clientEvents());
+            //nsole.log('da');
         },
 
         /**
