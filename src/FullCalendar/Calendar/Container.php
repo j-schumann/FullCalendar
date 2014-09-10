@@ -11,7 +11,7 @@ use DateTime;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
- * Used to as event target, to transport parameters & events and check permissions.
+ * Used as event target, to transport parameters & events and check permissions.
  */
 class Container implements ResourceInterface
 {

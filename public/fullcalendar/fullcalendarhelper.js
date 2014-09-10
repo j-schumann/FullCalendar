@@ -112,8 +112,8 @@
         /**
          * Called when a new date/time range is selected to create a new entry.
          *
-         * @param {object} startDate
-         * @param {object} endDate
+         * @param {Moment} startDate
+         * @param {Moment} endDate
          * @param {object} jsEvent
          * @param {object} view
          * @returns void
@@ -149,7 +149,7 @@
          * @param {object} view
          * @return void
          */
-        onEventResize: function(event, revertFunc, jsEvent, ui, view) {
+        onEventResize: function(event, delta, revertFunc, jsEvent, ui, view) {
             // store the function so the server response or closing
             // the dialog window may trigger it
             event.revertFunc = revertFunc;
@@ -176,7 +176,7 @@
          * @param {object} view
          * @return void
          */
-        onEventDrop: function(event, revertFunc, jsEvent, ui, view) {
+        onEventDrop: function(event, delta, revertFunc, jsEvent, ui, view) {
             // store the function so the server response or closing
             // the dialog window may trigger it
             event.revertFunc = revertFunc;
@@ -235,6 +235,8 @@
                 close: $.proxy(function() {
                     this.container.fullCalendar('unselect');
 
+                    // revert the changes per default, the server should trigger
+                    // an event reload if something changed.
                     if (typeof closeCallback === 'function') {
                         closeCallback();
                     }
