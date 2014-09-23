@@ -34,15 +34,20 @@ class FullCalendar extends AbstractHelper
      *
      * @var array
      */
-    protected $defaults = array(
+    protected $defaults = [
         'calendarId' => 'calendar',
         'container'  => 'calendar',
-    );
+    ];
 
     /**
-     * {@inheritdoc}
+     * Called when using $this->fullCalendar() in the view script.
+     * Either renders the calendar when the config array is given or returns the helper
+     * instance.
+     *
+     * @param array $config
+     * @return string|self
      */
-    public function __invoke($config = null)
+    public function __invoke(array $config = null)
     {
         if (!$config) {
             return $this;
@@ -63,30 +68,30 @@ class FullCalendar extends AbstractHelper
 
         // only set the API if the user has not set any custom URLs
         if (!isset($config['api'])) {
-            $params = array('calendar' => $config['calendarId']);
-            $config['api'] = array(
-                'load'   => $this->basePath.$this->getView()->url('calendar-module/load', $params),
-                'click'  => $this->basePath.$this->getView()->url('calendar-module/click', $params),
-                'create' => $this->basePath.$this->getView()->url('calendar-module/create', $params),
-                'update' => $this->basePath.$this->getView()->url('calendar-module/update', $params),
-                'delete' => $this->basePath.$this->getView()->url('calendar-module/delete', $params),
-            );
+            $params = ['calendar' => $config['calendarId']];
+            $config['api'] = [
+                'load'   => $this->basePath.$this->getView()->url('fullcalendar/load', $params),
+                'click'  => $this->basePath.$this->getView()->url('fullcalendar/click', $params),
+                'create' => $this->basePath.$this->getView()->url('fullcalendar/create', $params),
+                'update' => $this->basePath.$this->getView()->url('fullcalendar/update', $params),
+            ];
         }
 
         // only set if no custom translations were injected
         if (!isset($config['translations'])) {
-            $config['translations'] = array(
+            $config['translations'] = [
                 'createTitle' => $this->getView()->translate('view.fullCalendar.createTitle'),
                 'updateTitle' => $this->getView()->translate('view.fullCalendar.updateTitle'),
-            );
+            ];
         }
 
-        // we don't add inline script or script into the header but set the
-        // fullcalendar-autoload class so the FullcalendarHelper does the rest
-        // If we load an calendar via Ajax we have to call
+        // We don't add inline script or scripts into the header, instead set the
+        // fullcalendar-autoload class so the FullcalendarHelper does the rest.
+        // If we load a calendar via Ajax we have to call
         // $.FullCalendarHelper.autoload() manually
         $json = htmlspecialchars(json_encode($config, JSON_UNESCAPED_UNICODE));
-        return '<div id="'.$config['container'].'" data-fullcalendar="'.($json).'" class="fullcalendar-autoload"></div>';
+        return '<div id="'.$config['container']
+                .'" data-fullcalendar="'.$json.'" class="fullcalendar-autoload"></div>';
     }
 
     /**
@@ -178,8 +183,7 @@ class FullCalendar extends AbstractHelper
     {
         if ($merge) {
             $this->defaults = array_merge($this->defaults, $settings);
-        }
-        else {
+        } else {
             $this->defaults = $settings;
         }
         return $this;

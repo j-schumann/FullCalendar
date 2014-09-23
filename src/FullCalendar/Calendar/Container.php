@@ -54,7 +54,7 @@ class Container implements ResourceInterface
     /**
      * @var array
      */
-    protected $events = array();
+    protected $events = [];
 
     /**
      * Get all events stored for this calendar.
@@ -74,7 +74,7 @@ class Container implements ResourceInterface
      */
     public function getEventArray()
     {
-        $events = array();
+        $events = [];
         foreach($this->events as $event) {
             $events[] = $event->toArray();
         }

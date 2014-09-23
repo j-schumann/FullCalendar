@@ -8,13 +8,6 @@ return array(
         'resolver_configs' => array(
             'paths' => array(
                 __DIR__ . '/../public',
-
-                // If fullcalendar is installed via composer it resides in
-                // vendor/arshaw/fullcalendar, make it reachable via
-                // /fullcalendar/fullcalendar.js etc.
-                // If you install fullcalendar via Bower etc adjust the script_path in
-                // the full_calendar section!
-                __DIR__ . '/../../../arshaw',
             ),
         ),
     ),
@@ -32,18 +25,18 @@ return array(
         // are served from other paths than the HTML default
         'base_path' => '',
 
-        // load the fullcalendar JS libraries and CSS from this URL path:
+        // load the fullcalendar helper library from this URL path:
         'script_path' => '/fullcalendar',
     ),
 // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="router">
     'router' => array(
         'routes' => array(
-            'calendar-module' => array(
-                'type' => 'Literal',
+            'fullcalendar' => array(
+                'type'    => 'Literal',
                 'options' => array(
                     // allow to load just a calendar via XHR
-                    'route'    => '/calendar-module/',
+                    'route'    => '/fullcalendar/',
                     'defaults' => array(
                         '__NAMESPACE__' => 'FullCalendar\Controller',
                         'controller'    => 'FullCalendar\Controller\FullCalendar',
@@ -51,7 +44,7 @@ return array(
                     ),
                 ),
                 'may_terminate' => true,
-                'child_routes' => array(
+                'child_routes'  => array(
                     // load all events for the given calendar
                     'load' => array(
                         'type'    => 'Segment',
@@ -92,26 +85,8 @@ return array(
                             ),
                         ),
                     ),
-                    // delete an event from the given calendar
-                    'delete' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => 'delete/[:calendar][/]',
-                            'defaults' => array(
-                                'action' => 'delete',
-                            ),
-                        ),
-                    ),
                 ),
             ),
-        ),
-    ),
-// </editor-fold>
-// <editor-fold defaultstate="collapsed" desc="service_manager">
-    'service_manager' => array(
-        // classes that have no dependencies or are ServiceLocatorAware
-        'invokables' => array(
-            'FullCalendar\Service\Calendar' => 'FullCalendar\Service\Calendar',
         ),
     ),
 // </editor-fold>

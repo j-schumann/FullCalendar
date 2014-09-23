@@ -7,6 +7,7 @@
 
 namespace FullCalendar\Controller;
 
+use DateTime;
 use FullCalendar\Calendar\Container;
 use Vrok\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
@@ -17,6 +18,20 @@ use Zend\View\Model\JsonModel;
 class FullCalendarController extends AbstractActionController
 {
     const EVENT_LOAD_ENTRIES  = 'loadEvents';
+    const EVENT_ENTRY_CLICKED = 'entryClicked';
+    const EVENT_CREATE_ENTRY  = 'createEntry';
+    const EVENT_UPDATE_ENTRY  = 'updateEntry';
+
+    /**
+     * Allows to load a calendar via XHR
+     *
+     * @throws \RuntimeException
+     */
+    public function indexAction()
+    {
+        // @todo
+        throw new \RuntimeException('Not yet implemented');
+    }
 
     /**
      * Returns a list of all found entries for the given container.
@@ -25,26 +40,24 @@ class FullCalendarController extends AbstractActionController
      */
     public function loadAction()
     {
-        $calendarId = $this->params('calendar');
-
-        $startDate = new \DateTime($this->params()->fromQuery('start'));
-        $endDate = new \DateTime($this->params()->fromQuery('end'));
-        if ($startDate > $endDate) {
-            return new JsonModel(array());
+        $startDate = new DateTime($this->params()->fromQuery('start'));
+        $endDate = new DateTime($this->params()->fromQuery('end'));
+        if (!$startDate || !$endDate || $startDate > $endDate) {
+            return new JsonModel([]);
         }
 
+        // prepare the container which will be handed to each event listener to inject
+        // events into it. This way each listener has all necessary parameters and we
+        // dont need to merge results and check for duplicates
         $container = new Container();
-        $container->setId($calendarId);
+        $container->setId($this->params('calendar'));
         $container->setStartDate($startDate);
         $container->setEndDate($endDate);
 
-        $results =
-            $this->getEventManager()->trigger(self::EVENT_LOAD_ENTRIES, $container);
-        if ($results->stopped()) {
-            return array();
-        }
+        $result = $this->getEventManager()->trigger(self::EVENT_LOAD_ENTRIES, $container);
 
-        return new JsonModel($container->getEventArray());
+        $data = $result->stopped() ? [] : $container->getEventArray();
+        return new JsonModel($data);
     }
 
     /**
@@ -56,12 +69,13 @@ class FullCalendarController extends AbstractActionController
      */
     public function clickAction()
     {
-        $calendarId = $this->params('calendar');
-        $container = $this->params()->fromQuery('container');
-        $eventId = $this->params()->fromQuery('eventId');
+        $results = $this->getEventManager()->trigger(self::EVENT_ENTRY_CLICKED, $this, [
+            'calendarId' => $this->params('calendar'),
+            'eventId'    => $this->params()->fromQuery('eventId'),
+            'container'  => $this->params()->fromQuery('container'),
+        ]);
 
-        $service = $this->getServiceLocator()->get('FullCalendar\Service\Calendar');
-        $data = $service->clickEntry($calendarId, $eventId, $container);
+        $data = $results->stopped() ? [] : $results->last();
         return new JsonModel($data);
     }
 
@@ -74,21 +88,20 @@ class FullCalendarController extends AbstractActionController
      */
     public function createAction()
     {
-        $startDate = new \DateTime($this->params()->fromQuery('startDate'));
-        $endDate = new \DateTime($this->params()->fromQuery('endDate'));
-        if ($startDate > $endDate) {
-            return new JsonModel(array());
+        $startDate = new DateTime($this->params()->fromQuery('startDate'));
+        $endDate = new DateTime($this->params()->fromQuery('endDate'));
+        if (!$startDate || !$endDate || $startDate > $endDate) {
+            return new JsonModel([]);
         }
 
-        $params = array(
+        $results = $this->getEventManager()->trigger(self::EVENT_CREATE_ENTRY, $this, [
             'calendarId' => $this->params('calendar'),
             'container'  => $this->params()->fromQuery('container'),
-            'endDate'    => $this->params()->fromQuery('endDate'),
-            'startDate'  => $this->params()->fromQuery('startDate'),
-        );
+            'startDate'  => $startDate,
+            'endDate'    => $endDate,
+        ]);
 
-        $service = $this->getServiceLocator()->get('FullCalendar\Service\Calendar');
-        $data = $service->createEntry($params, $startDate, $endDate);
+        $data = $results->stopped() ? [] : $results->last();
         return new JsonModel($data);
     }
 
@@ -101,22 +114,21 @@ class FullCalendarController extends AbstractActionController
      */
     public function updateAction()
     {
-        $startDate = new \DateTime($this->params()->fromQuery('startDate'));
-        $endDate = new \DateTime($this->params()->fromQuery('endDate'));
-        if ($startDate > $endDate) {
-            return new JsonModel(array());
+        $startDate = new DateTime($this->params()->fromQuery('startDate'));
+        $endDate = new DateTime($this->params()->fromQuery('endDate'));
+        if (!$startDate || !$endDate || $startDate > $endDate) {
+            return new JsonModel([]);
         }
 
-        $params = array(
+        $results = $this->getEventManager()->trigger(self::EVENT_UPDATE_ENTRY, $this, [
             'calendarId' => $this->params('calendar'),
             'container'  => $this->params()->fromQuery('container'),
             'eventId'    => $this->params()->fromQuery('eventId'),
-            'startDate'  => $this->params()->fromQuery('startDate'),
-            'endDate'    => $this->params()->fromQuery('endDate'),
-        );
+            'startDate'  => $startDate,
+            'endDate'    => $endDate,
+        ]);
 
-        $service = $this->getServiceLocator()->get('FullCalendar\Service\Calendar');
-        $data = $service->updateEntry($params, $startDate, $endDate);
+        $data = $results->stopped() ? [] : $results->last();
         return new JsonModel($data);
     }
 }

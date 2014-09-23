@@ -64,6 +64,8 @@
 
             selectable: true,
             selectHelper: true,
+
+            // @todo doku
             unselectCancel: '.ui-dialog',
 
             firstDay: 1,
