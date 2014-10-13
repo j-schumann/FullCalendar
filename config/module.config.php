@@ -38,7 +38,6 @@ return array(
                     // allow to load just a calendar via XHR
                     'route'    => '/fullcalendar/',
                     'defaults' => array(
-                        '__NAMESPACE__' => 'FullCalendar\Controller',
                         'controller'    => 'FullCalendar\Controller\FullCalendar',
                         'action'        => 'index',
                     ),
