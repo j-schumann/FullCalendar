@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright   (c) 2014, Vrok
  * @license     http://customlicense CustomLicense
@@ -23,7 +24,7 @@ class FullCalendarController extends AbstractActionController
     const EVENT_UPDATE_ENTRY  = 'updateEntry';
 
     /**
-     * Allows to load a calendar via XHR
+     * Allows to load a calendar via XHR.
      *
      * @throws \RuntimeException
      */
@@ -41,7 +42,7 @@ class FullCalendarController extends AbstractActionController
     public function loadAction()
     {
         $startDate = new DateTime($this->params()->fromQuery('start'));
-        $endDate = new DateTime($this->params()->fromQuery('end'));
+        $endDate   = new DateTime($this->params()->fromQuery('end'));
         if (!$startDate || !$endDate || $startDate > $endDate) {
             return new JsonModel([]);
         }
@@ -57,6 +58,7 @@ class FullCalendarController extends AbstractActionController
         $result = $this->getEventManager()->trigger(self::EVENT_LOAD_ENTRIES, $container);
 
         $data = $result->stopped() ? [] : $container->getEventArray();
+
         return new JsonModel($data);
     }
 
@@ -76,6 +78,7 @@ class FullCalendarController extends AbstractActionController
         ]);
 
         $data = $results->stopped() ? [] : $results->last();
+
         return new JsonModel($data);
     }
 
@@ -89,7 +92,7 @@ class FullCalendarController extends AbstractActionController
     public function createAction()
     {
         $startDate = new DateTime($this->params()->fromQuery('startDate'));
-        $endDate = new DateTime($this->params()->fromQuery('endDate'));
+        $endDate   = new DateTime($this->params()->fromQuery('endDate'));
         if (!$startDate || !$endDate || $startDate > $endDate) {
             return new JsonModel([]);
         }
@@ -102,6 +105,7 @@ class FullCalendarController extends AbstractActionController
         ]);
 
         $data = $results->stopped() ? [] : $results->last();
+
         return new JsonModel($data);
     }
 
@@ -115,7 +119,7 @@ class FullCalendarController extends AbstractActionController
     public function updateAction()
     {
         $startDate = new DateTime($this->params()->fromQuery('startDate'));
-        $endDate = new DateTime($this->params()->fromQuery('endDate'));
+        $endDate   = new DateTime($this->params()->fromQuery('endDate'));
         if (!$startDate || !$endDate || $startDate > $endDate) {
             return new JsonModel([]);
         }
@@ -129,6 +133,7 @@ class FullCalendarController extends AbstractActionController
         ]);
 
         $data = $results->stopped() ? [] : $results->last();
+
         return new JsonModel($data);
     }
 }

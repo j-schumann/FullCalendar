@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  @copyright   (c) 2014-2015, Vrok
  *  @license     http://customlicense CustomLicense

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright   (c) 2014, Vrok
  * @license     http://customlicense CustomLicense
@@ -16,14 +17,14 @@ use Zend\View\Helper\AbstractHelper;
 class FullCalendar extends AbstractHelper
 {
     /**
-     * Prepended to the API URLs
+     * Prepended to the API URLs.
      *
      * @var string
      */
     protected $basePath = '';
 
     /**
-     * Prepended to the head-scripts/styles
+     * Prepended to the head-scripts/styles.
      *
      * @var string
      */
@@ -45,6 +46,7 @@ class FullCalendar extends AbstractHelper
      * instance.
      *
      * @param array $config
+     *
      * @return string|self
      */
     public function __invoke(array $config = null)
@@ -60,6 +62,7 @@ class FullCalendar extends AbstractHelper
      * Returns the calendar container and adds the necessary init code to the headscript.
      *
      * @param array $config
+     *
      * @return string
      */
     public function render(array $config)
@@ -68,7 +71,7 @@ class FullCalendar extends AbstractHelper
 
         // only set the API if the user has not set any custom URLs
         if (!isset($config['api'])) {
-            $params = ['calendar' => $config['calendarId']];
+            $params        = ['calendar' => $config['calendarId']];
             $config['api'] = [
                 'load'   => $this->basePath.$this->getView()->url('fullcalendar/load', $params),
                 'click'  => $this->basePath.$this->getView()->url('fullcalendar/click', $params),
@@ -90,6 +93,7 @@ class FullCalendar extends AbstractHelper
         // If we load a calendar via Ajax we have to call
         // $.FullCalendarHelper.autoload() manually
         $json = htmlspecialchars(json_encode($config, JSON_UNESCAPED_UNICODE));
+
         return '<div id="'.$config['container']
                 .'" data-fullcalendar="'.$json.'" class="fullcalendar-autoload"></div>';
     }
@@ -131,11 +135,13 @@ class FullCalendar extends AbstractHelper
      * Sets the prefix to use for the API URLs.
      *
      * @param string $path
+     *
      * @return self
      */
     public function setBasePath($path)
     {
         $this->basePath = $path;
+
         return $this;
     }
 
@@ -153,11 +159,13 @@ class FullCalendar extends AbstractHelper
      * Sets the base path where the fullcalendar script files are located.
      *
      * @param string $path
+     *
      * @return self
      */
     public function setScriptPath($path)
     {
         $this->scriptPath = $path;
+
         return $this;
     }
 
@@ -175,8 +183,9 @@ class FullCalendar extends AbstractHelper
      * Sets the default settings for created calendars.
      *
      * @param array $settings
-     * @param bool $merge   if true the settings will be merged with the defaults,
-     *     else the defaults are replaces
+     * @param bool  $merge    if true the settings will be merged with the defaults,
+     *                        else the defaults are replaces
+     *
      * @return self
      */
     public function setDefaults(array $settings, $merge = true)
@@ -186,6 +195,7 @@ class FullCalendar extends AbstractHelper
         } else {
             $this->defaults = $settings;
         }
+
         return $this;
     }
 }

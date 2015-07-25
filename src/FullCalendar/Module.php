@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright   (c) 2014, Vrok
  * @license     http://customlicense CustomLicense
@@ -24,7 +25,7 @@ class Module implements
      */
     public function getConfig()
     {
-        return include __DIR__ . '/../../config/module.config.php';
+        return include __DIR__.'/../../config/module.config.php';
     }
 
     /**
@@ -34,9 +35,9 @@ class Module implements
      */
     public function getViewHelperConfig()
     {
-        return array(
-            'factories' => array(
-                'fullCalendar' => function($helperPluginManager) {
+        return [
+            'factories' => [
+                'fullCalendar' => function ($helperPluginManager) {
                     $helper = new View\Helper\FullCalendar();
 
                     $serviceLocator = $helperPluginManager->getServiceLocator();
@@ -53,7 +54,7 @@ class Module implements
 
                     return $helper;
                 },
-            ),
-        );
+            ],
+        ];
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  @copyright   (c) 2014-2015, Vrok
  *  @license     http://customlicense CustomLicense
@@ -202,7 +203,7 @@ class Event implements EventInterface
      */
     public function toArray()
     {
-        return array(
+        return [
             'id'        => $this->getId(),
             'allDay'    => $this->getAllDay(),
             'title'     => $this->getTitle(),
@@ -211,6 +212,6 @@ class Event implements EventInterface
             'editable'  => $this->getEditable(),
             'className' => $this->getClassName(),
             'url'       => $this->getUrl(),
-        );
+        ];
     }
 }

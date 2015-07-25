@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  @copyright   (c) 2014-2015, Vrok
  *  @license     http://customlicense CustomLicense
@@ -75,9 +76,10 @@ class Container implements ResourceInterface
     public function getEventArray()
     {
         $events = [];
-        foreach($this->events as $event) {
+        foreach ($this->events as $event) {
             $events[] = $event->toArray();
         }
+
         return $events;
     }
 
@@ -107,6 +109,7 @@ class Container implements ResourceInterface
      * Sets the list of events for this calendar.
      *
      * @param array $events
+     *
      * @throws Exception\InvalidArgumentException
      */
     public function setEvents(array $events)

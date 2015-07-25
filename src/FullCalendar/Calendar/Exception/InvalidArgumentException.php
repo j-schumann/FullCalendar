@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  @copyright   (c) 2014-2015, Vrok
  *  @license     http://customlicense CustomLicense
@@ -9,4 +10,5 @@ namespace FullCalendar\Calendar\Exception;
 
 class InvalidArgumentException extends \InvalidArgumentException implements
     ExceptionInterface
-{}
+{
+}
